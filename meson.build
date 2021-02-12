@@ -132,6 +132,8 @@ dftd4_dep_static = declare_dependency(
 # Collect main executable
 subdir('app')
 
+subdir('export')
+
 if install
   install_headers('include/dftd4.h')
   
