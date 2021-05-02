@@ -167,6 +167,9 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+# Poetry generated setup.py
+/setup.py
+
 # Directories
 /build*/
 /_*/
