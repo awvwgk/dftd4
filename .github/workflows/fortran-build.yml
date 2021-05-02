@@ -266,6 +266,7 @@ jobs:
         intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic
         intel-oneapi-mkl-devel
         asciidoctor
+      PYTHON_V: 3.8
 
     steps:
     - name: Checkout code
@@ -273,7 +274,7 @@ jobs:
 
     - uses: actions/setup-python@v1
       with:
-        python-version: '3.x'
+        python-version: ${{ env.PYTHON_V }}
 
     - name: Add Intel repository
       run: |
@@ -290,7 +291,7 @@ jobs:
         printenv >> $GITHUB_ENV
 
     - name: Install meson
-      run: pip3 install meson==0.57.1 ninja
+      run: pip3 install meson==0.57.1 ninja ${{ env.PIP_EXTRAS }}
 
     - name: Configure meson build
       run: >-
@@ -325,6 +326,30 @@ jobs:
       with:
         name: dftd4-bleed.tar.xz
         path: dftd4-bleed.tar.xz
+
+    - name: Reconfigure meson build (with Python API)
+      run: >-
+        meson configure ${{ env.BUILD_DIR }}
+        --prefix=$PWD/_dist
+        --libdir=lib
+        --default-library=static
+        -Dfortran_link_args="-qopenmp"
+        -Dlapack=mkl-rt
+        -Dpython=true
+
+    - name: Rebuild library (with Python API)
+      run: meson compile -C ${{ env.BUILD_DIR }}
+
+    - name: Install project (with Python API)
+      run: |
+        meson install -C ${{ env.BUILD_DIR }} --no-rebuild
+        echo "DFTD4_PREFIX=$PWD/_dist" >> $GITHUB_ENV
+
+    - name: Test Python API
+      run: pytest --pyargs dftd4 -vv
+      env:
+        LD_LIBRARY_PATH: ${{ env.LD_LIBRARY_PATH }}:${{ env.DFTD4_PREFIX }}/lib
+        PYTHONPATH: ${{ env.PYTHONPATH }}:${{ env.DFTD4_PREFIX }}/lib/python${{ env.PYTHON_V }}/site-packages
 
   # Inspired from https://github.com/endless-sky/endless-sky
   continuous-delivery:
