@@ -52,7 +52,7 @@ subroutine get_dispersion_hessian(mol, disp, param, cutoff, hessian)
 
    integer :: iat, ix
    real(wp), parameter :: step = 1.0e-4_wp
-   type(structure_type) :: displ
+   type(structure_type), allocatable :: displ
    real(wp) :: el, er
    real(wp), allocatable :: gl(:, :), gr(:, :), sl(:, :), sr(:, :)
 
@@ -60,7 +60,7 @@ subroutine get_dispersion_hessian(mol, disp, param, cutoff, hessian)
    !$omp parallel default(none) &
    !$omp private(iat, ix, displ, er, el, gr, gl, sr, sl) &
    !$omp shared(mol, disp, param, cutoff, hessian)
-   displ = mol
+   allocate(displ, source=mol)
    allocate(gl(3, mol%nat), gr(3, mol%nat), sl(3, 3), sr(3, 3))
    !$omp do schedule(dynamic) collapse(2)
    do iat = 1, mol%nat
