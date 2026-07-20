@@ -549,9 +549,7 @@ def test_pair_resolved() -> None:
     )
 
     assert approx(res.get("additive pairwise energy"), abs=thr) == pair_disp2
-    assert (
-        approx(res.get("non-additive pairwise energy"), abs=thr) == pair_disp3
-    )
+    assert approx(res.get("non-additive pairwise energy"), abs=thr) == pair_disp3
 
 
 def test_properties() -> None:

@@ -73,9 +73,7 @@ class Structure:
             raise ValueError("Expected triples of cartesian coordinates")
 
         if 3 * numbers.size != positions.size:
-            raise ValueError(
-                "Dimension mismatch between numbers and positions"
-            )
+            raise ValueError("Dimension mismatch between numbers and positions")
 
         self._natoms = len(numbers)
         _numbers = np.ascontiguousarray(numbers, dtype="i4")
@@ -187,9 +185,7 @@ class DampingParam:
             del kwargs["method"]
 
         if not kwargs:
-            raise TypeError(
-                "Method name or complete damping parameter set required"
-            )
+            raise TypeError("Method name or complete damping parameter set required")
 
         if "method" in kwargs:
             self._param = self.load_param(**kwargs)
@@ -319,9 +315,7 @@ class DispersionModel(Structure):
     ) -> None:
         """Set realspace cutoffs and optional smoothing widths."""
 
-        library.set_model_realspace_cutoff(
-            self._disp, disp2, disp3, cn, width2, width3
-        )
+        library.set_model_realspace_cutoff(self._disp, disp2, disp3, cn, width2, width3)
 
     def get_dispersion(self, param: DampingParam, grad: bool) -> dict:
         """

@@ -86,22 +86,20 @@ array([[-0.        , -0.        ,  0.00296845],
        [-0.        , -0.00119152, -0.00148423]])
 """
 
-try:
-    import ase
-except ModuleNotFoundError:
-    raise ModuleNotFoundError("This submodule requires ASE installed")
-
 from typing import List, Optional
 
-from ase.atoms import Atoms
-from ase.calculators.calculator import (
-    CalculationFailed,
-    Calculator,
-    InputError,
-    all_changes,
-)
-from ase.calculators.mixing import SumCalculator
-from ase.units import Bohr, Hartree
+try:
+    from ase.atoms import Atoms
+    from ase.calculators.calculator import (
+        CalculationFailed,
+        Calculator,
+        InputError,
+        all_changes,
+    )
+    from ase.calculators.mixing import SumCalculator
+    from ase.units import Bohr, Hartree
+except ModuleNotFoundError as e:
+    raise ModuleNotFoundError("This submodule requires ASE installed") from e
 
 from .interface import DampingParam, DispersionModel
 
