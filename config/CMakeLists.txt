@@ -52,6 +52,8 @@ set(
   "${${PROJECT_NAME}-module-dir}"
 )
 set(module-dir "${module-dir}" PARENT_SCOPE)
+set(CMAKE_INSTALL_MODULEDIR "{CMAKE_INSTALL_INCLUDEDIR}/${${PROJECT_NAME}-module-dir}")
+GNUInstallDirs_get_absolute_install_dir(CMAKE_INSTALL_FULL_MODULEDIR CMAKE_INSTALL_MODULEDIR)
 
 # Compiler-specific configurations
 
